@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-signin-client_id" content="292567389344-4uian8c75e6hnahjf32afeb5rhhnrjmu.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <title>Trello to My Cal</title>
+</head>
+<body>
+    <!--<div class="g-signin2" data-onsuccess="onSignIn"></div>-->
+    <button class="btn" id="sign_in">Sign In</button>
+    <button class="btn" id="sign_out" style="display: none;">Sign Out</button>
+
+    <script type="text/javascript">
+        var CLIENT_ID = '292567389344-4uian8c75e6hnahjf32afeb5rhhnrjmu.apps.googleusercontent.com';
+        var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+        var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+
+        var signInBtn = document.getElementsByName("sign_in");
+        var signOutBtn = document.getElementsByName("sign_out");
+
+        function handleClientLoad() {
+            gapi.load("client:auth2", initClient);
+        }
+
+        function initClient() {
+            gapi.client.init({
+              clientId: CLIENT_ID,
+              discoverDocs: DISCOVERY_DOCS,
+              scopes: SCOPES
+            }).then(function () {
+              gapi.auth2.IsSignedIn.listen(updateSignInStates);
+
+              updateSignInStates(gapi.auth2.IsSignedIn.get());
+              signInBtn.onclick = handleSignInClick;
+              signOutBtn.onclick = handleSignOutClick;
+            })
+        }
+        
+        function updateSignInStates(isSignedIn) {
+          if (isSignedIn){
+            signInBtn.style.display = 'none';
+            signOutBtn.style.display = 'block';
+          }
+          else {
+            signInBtn.style.display = 'block';
+            signOutBtn.style.display = 'none';
+          }
+        }
+
+        function handleSignInClick() {
+          gapi.auth2.getAuthInstance().signIn();
+        }
+
+        function handleSignOutClick() {
+          gapi.auth2.getAuthInstance().signOut();
+        }
+
+        function onSignIn() {
+
+        }
+    </script>
+</body>
+</html>
